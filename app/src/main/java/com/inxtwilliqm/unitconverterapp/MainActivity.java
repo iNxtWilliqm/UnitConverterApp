@@ -1,5 +1,6 @@
 package com.inxtwilliqm.unitconverterapp;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,155 +28,80 @@ interface IConversion {
 class LengthConversion implements IConversion {
     @Override
     public double toBaseUnit(double value, String srcUnit) {
-        double result;
         switch (srcUnit) {
-            case "Centimeter":
-                result = value;
-                break;
-            case "Kilometer":
-                result = value * 100000;
-                break;
-            case "Inch":
-                result = value * 2.54;
-                break;
-            case "Foot":
-                result = value * 30.48;
-                break;
-            case "Yard":
-                result = value * 91.44;
-                break;
-            case "Mile":
-                result = value * 160934;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid unit: " + srcUnit);
+            case "Centimeter": return value;
+            case "Kilometer": return value * 100000;
+            case "Inch": return value * 2.54;
+            case "Foot": return value * 30.48;
+            case "Yard": return value * 91.44;
+            case "Mile": return value * 160934;
+            default: throw new IllegalArgumentException("Invalid unit: " + srcUnit);
         }
-        return result;
     }
 
     @Override
     public double fromBaseUnit(double value, String dstUnit) {
-        double result;
         switch (dstUnit) {
-            case "Centimeter":
-                result = value;
-                break;
-            case "Kilometer":
-                result = value / 100000;
-                break;
-            case "Inch":
-                result = value / 2.54;
-                break;
-            case "Foot":
-                result = value / 30.48;
-                break;
-            case "Yard":
-                result = value / 91.44;
-                break;
-            case "Mile":
-                result = value / 160934;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid unit: " + dstUnit);
+            case "Centimeter": return value;
+            case "Kilometer": return value / 100000;
+            case "Inch": return value / 2.54;
+            case "Foot": return value / 30.48;
+            case "Yard": return value / 91.44;
+            case "Mile": return value / 160934;
+            default: throw new IllegalArgumentException("Invalid unit: " + dstUnit);
         }
-        return result;
     }
 }
 
 class WeightConversion implements IConversion {
     @Override
     public double toBaseUnit(double value, String srcUnit) {
-        double result;
         switch (srcUnit) {
-            case "Gram":
-                result = value;
-                break;
-            case "Kilogram":
-                result = value * 1000;
-                break;
-            case "Pound":
-                result = value * 453.592;
-                break;
-            case "Ounce":
-                result = value * 28.3495;
-                break;
-            case "Ton":
-                result = value * 907185;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid unit: " + srcUnit);
+            case "Gram": return value;
+            case "Kilogram": return value * 1000;
+            case "Pound": return value * 453.592;
+            case "Ounce": return value * 28.3495;
+            case "Ton": return value * 907185;
+            default: throw new IllegalArgumentException("Invalid unit: " + srcUnit);
         }
-        return result;
     }
 
     @Override
     public double fromBaseUnit(double value, String dstUnit) {
-        double result;
         switch (dstUnit) {
-            case "Gram":
-                result = value;
-                break;
-            case "Kilogram":
-                result = value / 1000;
-                break;
-            case "Pound":
-                result = value / 453.592;
-                break;
-            case "Ounce":
-                result = value / 28.3495;
-                break;
-            case "Ton":
-                result = value / 907185;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid unit: " + dstUnit);
+            case "Gram": return value;
+            case "Kilogram": return value / 1000;
+            case "Pound": return value / 453.592;
+            case "Ounce": return value / 28.3495;
+            case "Ton": return value / 907185;
+            default: throw new IllegalArgumentException("Invalid unit: " + dstUnit);
         }
-        return result;
     }
 }
 
 class TemperatureConversion implements IConversion {
     @Override
     public double toBaseUnit(double value, String srcUnit) {
-        double result;
         switch (srcUnit) {
-            case "Celsius":
-                result = value;
-                break;
-            case "Kelvin":
-                result = value - 273.15;
-                break;
-            case "Fahrenheit":
-                result = (value - 32) / 1.8;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid unit: " + srcUnit);
+            case "Celsius": return value;
+            case "Kelvin": return value - 273.15;
+            case "Fahrenheit": return (value - 32) / 1.8;
+            default: throw new IllegalArgumentException("Invalid unit: " + srcUnit);
         }
-        return result;
     }
 
     @Override
     public double fromBaseUnit(double value, String dstUnit) {
-        double result;
         switch (dstUnit) {
-            case "Celsius":
-                result = value;
-                break;
-            case "Kelvin":
-                result = value + 273.15;
-                break;
-            case "Fahrenheit":
-                result = (value * 1.8) + 32;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid unit: " + dstUnit);
+            case "Celsius": return value;
+            case "Kelvin": return value + 273.15;
+            case "Fahrenheit": return (value * 1.8) + 32;
+            default: throw new IllegalArgumentException("Invalid unit: " + dstUnit);
         }
-        return result;
     }
 }
 
 public class MainActivity extends AppCompatActivity {
-
     private EditText input;
     private Button convertButton;
     private TextView result;
@@ -237,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         convertButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onClick(View view) {
                 String inputString = input.getText().toString();
@@ -255,12 +182,35 @@ public class MainActivity extends AppCompatActivity {
                     double baseValue = converter.toBaseUnit(value, srcUnit);
                     double convertedValue = converter.fromBaseUnit(baseValue, dstUnit);
 
-                    result.setText(String.format("Result: %.5f %s", convertedValue, dstUnit));
+                    result.setText(String.format("Result: %.5f %s", convertedValue, getUnitCode(dstUnit)));
                 } catch (NumberFormatException e) {
                     Toast.makeText(MainActivity.this, "Invalid number format", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private String getUnitCode(String unitName) {
+        switch (unitName) {
+            case "Centimeter": return "cm";
+            case "Kilometer": return "km";
+            case "Inch": return "in";
+            case "Foot": return "ft";
+            case "Yard": return "yd";
+            case "Mile": return "mi";
+
+            case "Gram": return "g";
+            case "Kilogram": return "kg";
+            case "Pound": return "lb";
+            case "Ounce": return "oz";
+            case "Ton": return "t";
+
+            case "Celsius": return "°C";
+            case "Fahrenheit": return "°F";
+            case "Kelvin": return "K";
+
+            default: return unitName;
+        }
     }
 
     private ArrayAdapter<CharSequence> createAdapter(int arrayResId) {
